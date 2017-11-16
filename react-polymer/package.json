@@ -1,0 +1,39 @@
+{
+  "name": "react-polymer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@svmx/react-scripts": "1.1.50",
+    "@svmx/ui-components-predix": "^0.1.30",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-mock-store": "^1.2.3",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "test": "react-scripts test --env=jsdom",
+    "cov": "react-scripts test --env=jsdom --coverage",
+    "lint": "NODE_ENV=development eslint --config .eslintrc.json src; exit 0",
+    "lint-style": "NODE_ENV=development stylelint --f string --syntax scss \"src/**/*.scss\"; exit 0",
+    "lint-report": "mkdir -p report && npm run lint-js-report && npm run lint-style-report",
+    "lint-js-report": "eslint -f checkstyle lib > report/eslint.xml; exit 0",
+    "lint-style-report": "stylelint --syntax scss \"src/**/*.scss\" > report/stylelint.xml",
+    "prettier": "NODE_ENV=development prettier-eslint --write \"src/**/*.js\"",
+    "tree": "react-scripts tree"
+  },
+  "devDependencies": {
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "jest": "^20.0.4"
+  }
+}
