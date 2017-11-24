@@ -60,17 +60,33 @@
     <script>
     var startTime;
     var lastMeasure;
+    var lastSpend;
 
     var startMeasure = function(name) {
         startTime = performance.now();
         lastMeasure = name;
     };
-    var stopMeasure = function() {
+    var stopMeasure = function(cb) {
         window.setTimeout(function() {
             var stop = performance.now();
-            console.log(lastMeasure+" took "+(stop-startTime));
+            lastSpend = stop-startTime;
+            console.log(lastMeasure+" took "+(lastSpend));
+            cb && cb();
         }, 0);
     };
+    const runs = [];
+    window.genReport = function() {
+        let str = "";
+        let sumA = 0;
+        let sumB = 0;
+        runs.forEach(item=> {
+            sumA +=parseInt(item[0]);
+            sumB +=parseInt(item[1]);
+            str+= "(" + parseInt(item[0]) + ", " + parseInt(item[1])+ "), "
+        })
+        console.log("all", str);
+        console.log("avg", `(${sumA/runs.length}, ${sumB/runs.length})`);
+    }
 
     class MainElement extends Polymer.GestureEventListeners(Polymer.Element) {
         static get is() { return 'main-element' }
@@ -95,7 +111,9 @@
         run() {
             startMeasure("run");
             this.data = this.buildData(1000);
-            stopMeasure();
+            stopMeasure(()=> {
+                runs.push([lastSpend]);
+            });
         }
         runLots() {
             startMeasure("runLots");
@@ -105,7 +123,10 @@
         clear() {
             startMeasure("clear");
             this.data = [];
-            stopMeasure();
+            stopMeasure(()=> {
+                runs[runs.length - 1][1] = lastSpend;
+            });
+            
         }
         del(e) {
             startMeasure("delete");

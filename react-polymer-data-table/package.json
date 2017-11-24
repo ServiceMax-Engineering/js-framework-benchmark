@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@svmx/react-scripts": "1.1.50",
-    "@svmx/ui-components-predix": "^0.1.30",
+    "@svmx/react-scripts": "^1.1.51",
+    "@svmx/ui-components-predix": "^0.1.37",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "react": "^16.1.1",
@@ -20,6 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-prod": "react-scripts build",
     "eject": "react-scripts eject",
     "test": "react-scripts test --env=jsdom",
     "cov": "react-scripts test --env=jsdom --coverage",

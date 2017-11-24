@@ -7,7 +7,7 @@
     "build": "node build.js",
     "build-prod": "node build.js",
     "compile": "node build.js",
-    "start": "http-server -c-1 .",
+    "start": "http-server -c-1 . -p 8081",
     "selenium": "cd webdriver-ts && npm run selenium && npm run results",
     "check": "cd webdriver-ts && npm run selenium -- --count 1 --exitOnError true"
   },
