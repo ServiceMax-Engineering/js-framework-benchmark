@@ -1,0 +1,37 @@
+<link rel="import" href="../build/bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="polymer-table">
+  <template>
+    <style include="shared-styles"></style>
+    <table class="table table-hover table-striped test-data">
+      <tbody>
+        <template is="dom-repeat" items="[[data]]">
+          <tr>
+            <td class="col-md-1">[[item.id]]</td>
+            <td class="col-md-4">
+              <a on-tap="select">[[item.label]]</a>
+            </td>
+            <td class="col-md-1">
+              <a on-tap="del">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              </a>
+            </td>
+            <td class="col-md-6"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </template>
+  <script>
+    Polymer({
+      is: 'polymer-table',
+      properties: {
+        data: {
+          type: Array,
+          value: function () { return []; },
+        },
+      },
+    });
+  </script>
+</dom-module>

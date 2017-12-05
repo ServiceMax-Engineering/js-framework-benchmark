@@ -94,4 +94,4 @@ export const swapRows = data => {
   }
   return newData;
 };
-export const deleteRow = (data, id) => data.filter(d => d.id != id);
+export const deleteRow = (data, id) => data.filter(d => d.id !== id);

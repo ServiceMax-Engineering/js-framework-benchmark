@@ -1,10 +1,12 @@
 import React from 'react';
-import { DataTable, DataTableColumn } from '@svmx/ui-components-predix';
 
 import { run, runLots, add, update, swapRows, deleteRow } from './utils';
 
 let startTime;
 let lastMeasure;
+let lastSpend;
+const runs = [];
+window.runs = runs;
 const startMeasure = name => {
   startTime = performance.now();
   lastMeasure = name;
@@ -16,7 +18,9 @@ const stopMeasure = () => {
       lastMeasure = null;
       const stop = performance.now();
       const duration = 0;
-      console.log(`${last} took ${stop - startTime}`);
+      lastSpend = stop - startTime;
+      runs.push(`${last}: ${lastSpend}`);
+      console.log(`${last} took ${lastSpend}`);
     }, 0);
   }
 };
@@ -48,11 +52,13 @@ export default class Main extends React.Component {
     const nextSelected = nextState.selected;
     return (
       !(data.length === nextData.length && data.every((v, i) => v === nextData[i])) ||
-      selected != nextSelected
+      selected !== nextSelected
     );
   }
   componentDidUpdate() {
-    stopMeasure();
+    stopMeasure(() => {
+      runs.push([lastSpend]);
+    });
   }
   run() {
     startMeasure('run');
@@ -97,13 +103,6 @@ export default class Main extends React.Component {
   }
 
   render() {
-    const dataTable = this.state.data.map(d => ({
-      id: d.id,
-      label: d.label,
-      deleteBtn: `
-      <px-icon icon="px-utl:close"></px-icon>
-  `,
-    }));
     return (
       <div className="container">
         <div className="jumbotron">
@@ -177,17 +176,7 @@ export default class Main extends React.Component {
             </div>
           </div>
         </div>
-        <DataTable
-          tableData={dataTable}
-          language="en"
-          striped
-          single-select
-          hide-pagination-control
-        >
-          <DataTableColumn name="id" />
-          <DataTableColumn name="label" />
-          <DataTableColumn name="deleteBtn" type="html" />
-        </DataTable>
+        <polymer-table data={JSON.stringify(this.state.data)} />
         <span className="preloadicon glyphicon glyphicon-remove" aria-hidden="true" />
       </div>
     );
