@@ -81,7 +81,16 @@ export const add = (id, data) => {
 
   return { data: [...data, ...newData.data], id: newData.id };
 };
+
+export const add100 = (id, data) => {
+  const newData = buildData(id, 100);
+
+  return { data: [...data, ...newData.data], id: newData.id };
+};
+
 export const run = id => buildData(id);
+export const run100 = id => buildData(id, 100);
+
 export const runLots = id => buildData(id, 10000);
 export const update = data => updateData(data);
 

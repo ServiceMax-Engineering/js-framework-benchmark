@@ -9,30 +9,39 @@
         <div class="container" >
             <div class="jumbotron">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h1>Polymer v2.0.0</h1>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="row">
-                            <div class="col-sm-6 smallpad">
+                            <div class="col-sm-4 smallpad">
+                                <button type="button" class="btn btn-primary btn-block" id="run100" on-tap="run100">Create 100 rows</button>
+                            </div>
+                            <div class="col-sm-4 smallpad">
                                 <button type="button" class="btn btn-primary btn-block" id="run" on-tap="run">Create 1,000 rows</button>
                             </div>
-                            <div class="col-sm-6 smallpad">
+                            <div class="col-sm-4 smallpad">
                                 <button type="button" class="btn btn-primary btn-block" id="runlots" on-tap="runLots">Create 10,000 rows</button>
                             </div>
-                            <div class="col-sm-6 smallpad">
+                            <div class="col-sm-4 smallpad">
+                                <button type="button" class="btn btn-primary
+                                btn-block" id="add100" on-tap="add100">Append 100 rows</button>
+                            </div>
+                            <div class="col-sm-4 smallpad">
                                 <button type="button" class="btn btn-primary
                                 btn-block" id="add" on-tap="add">Append 1,000 rows</button>
                             </div>
-                            <div class="col-sm-6 smallpad">
+                            <div class="col-sm-4 smallpad">
                                 <button type="button" class="btn btn-primary
                                 btn-block" id="update" on-tap="update">Update every 10th row</button>
                             </div>
-                            <div class="col-sm-6 smallpad">
+                            <div class="col-sm-4 smallpad">
+                            </div>
+                            <div class="col-sm-4 smallpad">
                                 <button type="button" class="btn btn-primary
                                 btn-block" id="clear" on-tap="clear">Clear</button>
                             </div>
-                            <div class="col-sm-6 smallpad">
+                            <div class="col-sm-4 smallpad">
                                 <button type="button" class="btn btn-primary
                                 btn-block" id="swaprows" on-tap="swapRows">Swap Rows</button>
                             </div>
@@ -61,6 +70,7 @@
     var startTime;
     var lastMeasure;
     var lastSpend;
+    const runs = {};
 
     var startMeasure = function(name) {
         startTime = performance.now();
@@ -69,24 +79,26 @@
     var stopMeasure = function(cb) {
         window.setTimeout(function() {
             var stop = performance.now();
-            lastSpend = stop-startTime;
+            lastSpend = stop - startTime;
+            if (!runs[lastMeasure]) {
+                runs[lastMeasure] = [];
+            }
+            runs[lastMeasure].push(parseInt(lastSpend, 10));
             console.log(lastMeasure+" took "+(lastSpend));
-            cb && cb();
+            
         }, 0);
     };
-    const runs = [];
-    window.genReport = function() {
-        let str = "";
-        let sumA = 0;
-        let sumB = 0;
-        runs.forEach(item=> {
-            sumA +=parseInt(item[0]);
-            sumB +=parseInt(item[1]);
-            str+= "(" + parseInt(item[0]) + ", " + parseInt(item[1])+ "), "
-        })
-        console.log("all", str);
-        console.log("avg", `(${sumA/runs.length}, ${sumB/runs.length})`);
+
+    function sum(arr) {
+        return arr.reduce((total, item) => total + item);
     }
+    window.genReport = () => {
+      Object.keys(runs).forEach(measure => {
+        console.log(measure, runs[measure]);
+        console.log(measure, 'avg-5', parseInt(sum(runs[measure].slice(0, 5)) / 5, 10));
+      });
+    };
+
 
     class MainElement extends Polymer.GestureEventListeners(Polymer.Element) {
         static get is() { return 'main-element' }
@@ -111,6 +123,18 @@
         run() {
             startMeasure("run");
             this.data = this.buildData(1000);
+            stopMeasure(()=> {
+                runs.push([lastSpend]);
+            });
+        }
+        add100() {
+            startMeasure("add100");
+            this.data = this.data.concat(this.buildData(100));
+            stopMeasure();
+        }
+        run100() {
+            startMeasure("run100");
+            this.data = this.buildData(100);
             stopMeasure(()=> {
                 runs.push([lastSpend]);
             });
